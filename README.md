@@ -1,1 +1,1 @@
-# add-first-node-Linked-List
+Mục đích : lưu trữ code.
