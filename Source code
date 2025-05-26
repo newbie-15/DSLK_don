@@ -1,0 +1,111 @@
+Method 1: Sử dụng con trỏ cấp 2 đễ quản lý và thay đổi con trỏ gốc
+Được tóm tắt trong 3 bước : 
+1. Tạo con trỏ node mới với cấp phát động.
+2. Cho con trỏ node mới trỏ tới head (vị trí đầu tiên trong dslk ban đầu).
+3. Biến head thành con trỏ node mới đễ các danh sách liên kết sau sẽ trỏ bắt đầu trước head.
+Code :
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next; //luu dia chi node ke tiep
+};
+typedef struct node node;
+void change(node **head, int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = NULL;
+	newNode->next = (*head); //node tiep theo cua newNode la head (tuc la newNode truoc head)
+	(*head) = newNode; //head luc nay se chuyen thanh newNode
+}
+void xuat(node *head){
+	while(head != NULL){
+		printf("%d ", head->data);
+		head = head->next;
+	}
+}
+int main(){
+	node *head = NULL; //con tro head ban dau tro toi NULL	
+	for(int i = 1; i <= 10; i++){
+		change(&head, i); 
+	}
+	xuat(head);
+	return 0;
+}
+Method 2 : Thay vì sử dụng con trỏ tới con trỏ (con trỏ cấp 2) hay tham chiếu tới con trỏ. Ta chỉ cần khai báo hàm trả về con trỏ.
+Code : 
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next; //luu dia chi node ke tiep
+};
+typedef struct node node;
+node* addfirst(node *head, int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = NULL;
+	newNode->next = head;
+	head = newNode;
+	return head;
+}
+void xuat(node *head){
+	while(head != NULL){
+		printf("%d ", head->data);
+		head = head->next;
+	}
+}
+int main(){
+	node *head = NULL; //con tro head ban dau tro toi NULL	
+	for(int i = 1; i <= 10; i++){
+		head = addfirst(head, i);
+	}
+	xuat(head);
+	return 0;
+}
+Method 3 : Chúng ta tạo 1 struct mới lưu 2 node là head (đầu) và tail (cuối) DSLK. Cách này mới mình học được trên 28Tech Blog.
+Code : 
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next;
+};
+typedef struct node node;
+struct LIST{
+	node *head;
+	node *tail;
+};
+typedef struct LIST list;
+void themdau(list *l, int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = NULL;
+	if(l->head == NULL){
+		l->tail = newNode; //tail se tro den node dau tien duoc them vao DSLK dung truoc NULL sau do ko them vao dau nua!
+	}
+	newNode->next = l->head;
+	l->head = newNode; //chuyen head len thanh vi tri newNode
+}
+void xuat(list l){
+	if(l.head == NULL){
+		printf("DSLK rong!");
+	}
+	else{
+		node *tmp = l.head;
+		while(tmp != NULL){
+			printf("%d ", tmp->data);
+			tmp = tmp->next;
+		}
+	}
+}
+int main(){
+	list l;
+	l.head = NULL;
+	l.tail = NULL;
+	for(int i = 1; i <= 10; i++){
+		themdau(&l, i);
+	}
+	xuat(l);
+	return 0;
+}
