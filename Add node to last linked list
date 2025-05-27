@@ -1,0 +1,120 @@
+Method 1 :
+Code : 
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next; //link
+};
+typedef struct node node;
+void themcuoi(node **head, int x){ //dung con tro cap 2 de control pointed lv1
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = NULL;
+	if(*head == NULL){ //important va chi gan 1 lan cho node head o dau danh sach ma khong di chuyen
+		*head = newNode;
+		return;
+	}
+	node *tmp = *head; //bien phu giup them node vao cuoi danh sach
+	while(tmp->next != NULL){
+		tmp = tmp->next;
+	}
+	tmp->next = newNode;
+}
+void xuat(node *head){
+	while(head != NULL){
+		printf("%d ", head->data);
+		head = head->next;
+	}
+}
+int main(){
+	node *head = NULL;
+	for(int i = 1; i <= 10; i++){
+		themcuoi(&head, i); //truyen dia chi con tro cap 1 cho point lv2 quan ly!
+	}
+	xuat(head);
+	return 0;
+}
+Method 2 : 
+Code : 
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next; //link
+};
+typedef struct node node;
+node *themcuoi(node *head, int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = NULL;
+	//
+	if(head == NULL){
+		return newNode; //head dau tien se luu gia tri dung dau dslk!
+	}
+	node *tmp = head;
+	while(tmp->next != NULL){
+		tmp = tmp->next;
+	}
+	tmp->next = newNode;
+	return head;
+}
+void xuat(node *head){
+	while(head != NULL){
+		printf("%d ", head->data);
+		head = head->next;
+	}
+}
+int main(){
+	node *head = NULL;
+	for(int i = 0; i <= 9; i++){
+		head = themcuoi(head, i);
+	}
+	xuat(head);
+	return 0;
+}
+
+Method 3:
+Code : 
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next; //link
+};
+typedef struct node node;
+struct LIST{
+	node *head;
+	node *tail;
+};
+typedef struct LIST list;
+void themcuoi(list *l, int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = NULL;
+	if(l->head == NULL){
+		l->head = newNode;
+		l->tail = newNode;
+	}
+	else{
+		l->tail->next = newNode;
+		l->tail = newNode;
+	}
+}
+void xuat(node *head){
+	node *tmp = head;
+	while(tmp != NULL){
+		printf("%d ", tmp->data);
+		tmp = tmp->next;
+	}
+}
+int main(){
+	list l;
+	l.head = NULL;
+	l.tail = NULL;
+	for(int i = 1; i <= 10; i++){
+		themcuoi(&l, i); //do ta ko khai bao con tro nen phai truyen dia chi l
+	}
+	xuat(l.head);
+	return 0;
+}
