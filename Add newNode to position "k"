@@ -1,0 +1,164 @@
+Method 1 :
+Code : 
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next;
+};
+typedef struct node node;
+int len(node *head){
+	int cnt = 0;
+	while(head != NULL){
+		++cnt;
+		head = head->next;
+	}
+	return cnt;
+}
+node *makenode(int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = NULL;
+	return newNode;
+}
+void themdau(node **head, int x){
+	node *newNode = makenode(x);
+	newNode->next = *head;
+	*head = newNode;
+}
+void themgiua(node **head, int x, int k){ //x la gia tri k la vi tri
+	int n = len(*head);
+	if(k < 1 || k > n+1){
+		printf("Vi tri chen k khong hop le!");
+		return;
+	}
+	else{
+		if(*head == NULL){
+			themdau(head, x);
+			return;
+		}
+		else{
+			node *newNode = makenode(x);
+			node *tmp = *head;
+			for(int i = 1; i < k-1; i++){
+				tmp = tmp->next;
+			}
+			newNode->next = tmp->next;
+			tmp->next = newNode;
+		}
+	}
+}
+void themcuoi(node **head, int x){
+	if(*head == NULL){
+		themdau(head, x);
+		return;
+	}
+	else{
+		node *newNode = makenode(x);
+		node *tmp = *head;
+		while(tmp->next != NULL){ //vong lap duyet den cuoi mang
+			tmp = tmp->next;
+		}
+		tmp->next = newNode;
+		tmp = newNode;
+	}
+}
+void xuat(node *head){
+	while(head != NULL){
+		printf("%d ", head->data);
+		head = head->next;
+	}
+}
+int main(){
+	node *head = NULL;
+	for(int i = 1; i <= 10; i++){
+		themcuoi(&head, i);
+	}
+	themgiua(&head, 15, 2);
+	themgiua(&head, 11, 4);
+	xuat(head);
+	return 0;
+}
+
+Method 2:
+Code:
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next; //link
+};
+typedef struct node node;
+int len(node *head){
+	int cnt = 0;
+	while(head != NULL){
+		++cnt;
+		head=head->next;
+	}
+	return cnt;
+}
+node *makenode(int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = NULL;
+	return newNode;
+}
+node *themdau(node *head, int x){
+	node *newNode = makenode(x);
+	newNode->next = head;
+	head = newNode;
+	return head;
+}
+node *themgiua(node *head, int x, int k){
+	int n = len(head);
+	if(k < 1 || k > n + 1){
+		printf("Vi tri k khong hop le!");
+		return head;
+	}
+	else{
+		if(k == 1){
+			return themdau(head, x);
+		}
+		else{
+			node *newNode = makenode(x);
+			node *tmp = head;
+			for(int i = 1; i < k-1; i++){
+				tmp = tmp->next;
+			} //vong lap xong tmp se la k-1
+			newNode->next = tmp->next;
+			tmp->next = newNode;
+			return head;
+		}
+	}
+}
+node *themcuoi(node *head, int x){
+	if(head == NULL){
+		return themdau(head, x);
+	}
+	node *newNode = makenode(x);
+	node *temp = head;
+	while(temp->next != NULL){
+		temp = temp->next;
+	}
+	temp->next = newNode;
+	temp = newNode; //vi tri cuoi cung se duoc chuyen sang newNode
+	return head;
+}
+void duyet(node *head){
+	while(head != NULL){
+		printf("%d ", head->data);
+		head = head->next;
+	}
+}
+int main(){
+	node *head = NULL;
+	for(int i = 1; i <= 10; i++){
+		head = themcuoi(head, i);
+	}
+	head = themgiua(head, 15, 2);
+	head = themgiua(head, 11, 4);
+	duyet(head);
+	return 0;
+}
+
+Method 3: Đang cập nhật
