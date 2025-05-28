@@ -1,0 +1,136 @@
+Method 1:
+Code: 
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next;
+};
+typedef struct node node;
+node *makenode(int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = NULL;
+	return newNode;
+}
+void themdau(node **head, int x){
+	node *newNode = makenode(x);
+	if(*head == NULL){
+		newNode->next = (*head);
+		(*head) = newNode;
+		return;
+	}
+	else{
+		newNode->next = (*head);
+		(*head) = newNode;
+	}
+}
+void xoacuoi(node **head){
+	if(*head == NULL){
+		return; //DSLK rong
+	}
+	else{
+		if((*head)->next == NULL){
+			(*head) = NULL;
+			return; //truong hop chi co 1 node duy nhat
+		}
+		else{
+			node *tmp = (*head);
+			while(tmp->next->next != NULL){ //node cuoi thu 2 tu cuoi tro ve
+				tmp = tmp->next;
+			}
+			node *delNode = tmp->next;
+			tmp->next = NULL;
+			free(delNode);
+		}
+	}
+}
+void duyet(node *head){
+	while(head != NULL){
+		printf("%d ", head->data);
+		head = head->next;
+	}
+}
+int main(){
+	node *head = NULL;
+	for(int i = 1; i <= 10; i++){
+		themdau(&head, i);
+	}
+	duyet(head);
+	printf("\n");
+	xoacuoi(&head);
+	duyet(head);
+	return 0;
+}
+
+Method 2:
+Code:
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next;
+};
+typedef struct node node;
+struct LIST{
+	node *head;
+	node *tail;
+};
+typedef struct LIST LIST;
+node *makeNode(int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = NULL;
+	return newNode;
+}
+void themdau(LIST *l, int x){
+	node *newNode = makeNode(x);
+	if(l->head == NULL){
+		l->head = newNode;
+		return;
+	}
+	else{
+		newNode->next = l->head;
+		l->head = newNode;
+	}
+}
+void xoacuoi(LIST *l){
+	if(l->head == NULL){
+		return;//DSLK rong
+	}
+	else if(l->head->next == NULL){
+		l->head = NULL;
+		l->tail = NULL;
+		return;
+	}
+	else{
+		node *tmp = l->head;
+		while(tmp->next->next != NULL){
+			tmp = tmp->next;
+		}
+		node *delNode = tmp->next;
+		tmp->next = NULL;
+		l->tail = tmp;
+		free(delNode);
+	}
+}
+void duyet(LIST l){
+	node *tmp = l.head;
+	while(tmp != NULL){
+		printf("%d ", tmp->data);
+		tmp = tmp->next;
+	}
+}
+int main(){
+	LIST l;
+	l.head = NULL;
+	l.tail = NULL;
+	for(int i = 1; i <= 10; i++){
+		themdau(&l, i); //reference address to pointed
+	}
+	duyet(l);
+	printf("\n");
+	xoacuoi(&l);
+	duyet(l);
+	return 0;
+}
