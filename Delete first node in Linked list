@@ -1,0 +1,143 @@
+Method 1:
+Code :
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next; //link
+};
+typedef struct node node;
+node *makenode(int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = NULL;
+	return newNode;
+}
+void themdau(node **head, int x){
+	node *newNode = makenode(x);
+	newNode->next = (*head);
+	(*head) = newNode;
+}
+void themcuoi(node **head, int x){
+	node *newNode = makenode(x);
+	if(*head == NULL){
+		themdau(head, x);
+		return;
+	}
+	else{
+		node *tmp = (*head);
+		while(tmp->next != NULL){
+			tmp = tmp->next;
+		}
+		newNode->next = tmp->next;
+		tmp->next = newNode;
+	}
+}
+void xoadau(node **head){
+	//can kiem tra DSLK co rong hay khong truoc khi xoa node dau
+	if(*head == NULL){
+		return; //neu xoa thi se bi crash (segmentation fault)
+	}
+	else{
+		node  *deleteNode = (*head);
+		(*head) = (*head)->next;
+		free(deleteNode);
+	}
+}
+void duyet(node *head){
+	while(head != NULL){
+		printf("%d ", head->data);
+		head = head->next;
+	}
+}
+int main(){
+	node *head = NULL;
+	for(int i = 1; i <= 10; i++){
+		themcuoi(&head, i);//vi tham so hinh thuc yeu cau la con tro cap 2 nen ta truyen dia chi con tro cap 1 de no quan ly
+	}
+	duyet(head);
+	xoadau(&head);
+	printf("\n");
+	duyet(head);
+	return 0;
+}
+
+Method 2:
+Code: 
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next; //link
+};
+typedef struct node node;
+struct LIST{
+	node *head;
+	node *tail;
+};
+typedef struct LIST LIST;
+node *makenode (int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = NULL;
+	return newNode;
+}
+void themdau(LIST *l, int x){
+	node *newNode = makenode(x);
+	if(l->head == NULL){
+		l->tail = newNode;
+	}
+	newNode->next = l->head;
+	l->head = newNode;
+}
+void themcuoi(LIST *l, int x){
+	node *newNode = makenode(x);
+	if(l->head == NULL){
+		themdau(l, x);
+		return;
+	}
+	else{
+		node *tmp = l->head;
+		while(tmp->next != NULL){
+			tmp = tmp->next;
+		}
+		newNode->next = tmp->next;
+		tmp->next = newNode;
+	}
+}
+void xoadau(LIST *l){
+	if(l->head == NULL){
+		return; //DSLK rong
+	}
+	else{
+		//sao luu node dau
+		node *deleteNode = l->head;
+		//tro node head sang node thu 2
+		l->head = l->head->next;
+		if(l->head == NULL){ //neu node tiep theo la NULL thi ta cung phai gan cho tail neu khong thi tail se luu nham gia tri va dia chi loi khi in ra!
+			l->tail == NULL;
+			return;
+		}
+		else{
+			free(deleteNode);
+		}
+	}
+}
+void duyet(LIST l){
+	node *tmp = l.head;
+	while(tmp != NULL){
+		printf("%d ", tmp->data);
+		tmp = tmp->next;
+	}
+}
+int main(){
+	LIST l;
+	l.head = NULL;
+	l.tail = NULL;
+	for(int i = 1; i <= 10; i++){
+		themdau(&l, i);
+	}
+	xoadau(&l);
+	duyet(l);
+	return 0;
+}
