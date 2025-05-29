@@ -104,3 +104,61 @@ int main(){
 	duyet(head);
 	return 0;
 }
+
+Method 3:
+Code:
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next;
+	struct node *prev;
+};
+typedef struct node node;
+struct LIST{ //xay dung them cau truc (struct) DSLK co 2 node
+	node *head;
+	node *tail;
+};
+int len(node *head){
+	int cnt = 0;
+	node *tmp = head;
+	while(tmp != NULL){
+		++cnt;
+		tmp = tmp->next;
+	}
+	return cnt;
+}
+node *makeNode(int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = newNode->prev = NULL;
+	return newNode;
+}
+void themdau(LIST *l, int x){
+	node *newNode = makeNode(x);
+	if(l->head == NULL){
+		l->head = l->tail = newNode;
+		return;
+	}
+	else{
+		newNode->next = l->head; //tro newNode den head
+		l->head->prev = newNode; //tro nguoc head ve newNode
+		l->head = newNode; //cap nhat vi tri moi cho head
+	}
+}
+void duyet(LIST l){
+	node *tmp = l.head;
+	while(tmp != NULL){
+		printf("%d ", tmp->data);
+		tmp = tmp->next;
+	}
+}
+int main(){
+	LIST l;
+	l.head = NULL, l.tail = NULL;
+	for(int i = 1; i <= 10; i++){
+		themdau(&l, i);
+	}
+	duyet(l);
+	return 0;
+}
