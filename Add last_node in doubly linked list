@@ -1,0 +1,168 @@
+Method 1:
+Code :
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next;
+	struct node *prev;
+};
+typedef struct node node;
+struct LIST{ //xay dung them cau truc (struct) DSLK co 2 node
+	node *head;
+	node *tail;
+};
+int len(node *head){
+	int cnt = 0;
+	node *tmp = head;
+	while(tmp != NULL){
+		++cnt;
+		tmp = tmp->next;
+	}
+	return cnt;
+}
+node *makeNode(int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = newNode->prev = NULL;
+	return newNode;
+}
+void themdau(LIST *l, int x){
+	node *newNode = makeNode(x);
+	if(l->head == NULL){
+		l->head = l->tail = newNode;
+		return;
+	}
+	else{
+		newNode->next = l->head; //tro newNode den head
+		l->head->prev = newNode; //tro nguoc head ve newNode
+		l->head = newNode; //cap nhat vi tri moi cho head
+	}
+}
+void themcuoi(node **head, int x){
+	node *newNode = makeNode(x);
+	if(*head == NULL){
+		(*head) = newNode;
+		return;
+	}
+	else{
+		node *tmp = (*head);
+		while(tmp->next != NULL){
+			tmp = tmp->next;
+		}
+		tmp->next = newNode;
+		newNode->prev = tmp;
+	}
+}
+void duyet(node *head){
+	while(head != NULL){
+		printf("%d ", head->data);
+		head = head->next;
+	}
+}
+int main(){
+	node *head = NULL;
+	for(int i = 1; i <= 10; i++){
+		themcuoi(&head, i);
+	}
+	duyet(head);
+	return 0;
+}
+
+Method 2:
+Code:
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next;
+	struct node *prev;
+};
+typedef struct node node;
+node *makeNode(int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = newNode->prev = NULL;
+	return newNode;
+}
+node *themcuoi(node *head, int x){
+	node *newNode = makeNode(x);
+	if(head == NULL){
+		head = newNode;
+		return head; //tra ve con tro head
+	}
+	else{
+		node *tmp = head;
+		while(tmp->next != NULL){
+			tmp = tmp->next;
+		}
+		newNode->prev = tmp;
+		tmp->next = newNode;
+		return head;
+	}
+}
+void duyet(node *head){
+	while(head != NULL){
+		printf("%d ", head->data);
+		head = head->next;
+	}
+}
+int main(){
+	//su dung cach thu 2
+	node *head = NULL;
+	for(int i = 1; i <= 10; i++){
+		head = themcuoi(head, i); //goi ham xong tra ve gan vao head de thong bao da cap nhat
+	}
+	duyet(head);
+	return 0;
+}
+
+Method 3:
+Code:
+#include <stdio.h>
+#include <stdlib.h>
+struct node{
+	int data;
+	struct node *next;
+	struct node *prev;
+};
+typedef struct node node;
+struct LIST{
+	node *head;
+	node *tail;
+};
+typedef struct LIST LIST;
+node *makeNode(int x){
+	node *newNode = (node*)malloc(sizeof(node));
+	newNode->data = x;
+	newNode->next = newNode->prev = NULL;
+	return newNode;
+}
+void themcuoi(LIST *l, int x){
+	node *newNode = makeNode(x);
+	if(l->head == NULL){
+		l->head = l->tail = newNode;
+		return;
+	}
+	else{
+		newNode->prev = l->tail;
+		l->tail->next = newNode;
+		l->tail = newNode;
+	}
+}
+void duyet(LIST l){
+	node *tmp = l.head;
+	while(tmp != NULL){
+		printf("%d ", tmp->data);
+		tmp = tmp->next;
+	}
+}
+int main(){
+	LIST l;
+	l.head = NULL, l.tail = NULL;
+	for(int i = 1; i <= 10; i++){
+		themcuoi(&l, i);
+	}
+	duyet(l);
+	return 0;
+}
